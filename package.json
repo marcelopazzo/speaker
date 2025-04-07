@@ -8,6 +8,6 @@
   },
   "scripts": {
     "build": "esbuild app/javascript/*.* --bundle --sourcemap --format=esm --outdir=app/assets/builds --public-path=/assets",
-    "build:css": "cp app/assets/stylesheets/application.css app/assets/builds/application.css"
+    "build:css": "cat app/assets/stylesheets/*.css > app/assets/builds/application.css"
   }
 }
