@@ -1,119 +1,112 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
+  static targets = ["input", "suggestion"]
+
   connect() {
-    this.setupKeyboard();
+    this.typingTimer = null
+    this.doneTypingInterval = 3000 // 3 seconds
+    this.setupKeyboard()
   }
 
   setupKeyboard() {
-    const textInput = document.getElementById('text-input');
-    const letterKeyboard = document.getElementById('letter-keyboard');
-    const numberKeyboard = document.getElementById('number-keyboard');
-    const toggleButton = document.getElementById('keyboard-toggle');
-    const toggleButtonNum = document.getElementById('keyboard-toggle-num');
+    const textInput = this.inputTarget
+    const letterKeyboard = document.getElementById('letter-keyboard')
+    const numberKeyboard = document.getElementById('number-keyboard')
+    const keyboardToggle = document.getElementById('keyboard-toggle')
+    const keyboardToggleNum = document.getElementById('keyboard-toggle-num')
 
-    let backspaceTimer = null;
-    const initialDelay = 500;
-    const repeatDelay = 100;
+    // Handle keyboard toggle
+    keyboardToggle.addEventListener('click', () => {
+      letterKeyboard.classList.add('hidden')
+      numberKeyboard.classList.remove('hidden')
+    })
 
-    function deleteCharacter() {
-      if (textInput.value.length > 0) {
-        textInput.value = textInput.value.slice(0, -1);
-        textInput.scrollTop = textInput.scrollHeight;
+    keyboardToggleNum.addEventListener('click', () => {
+      numberKeyboard.classList.add('hidden')
+      letterKeyboard.classList.remove('hidden')
+    })
+
+    // Handle key presses
+    const handleKeyPress = (key) => {
+      const previousValue = textInput.value
+
+      if (key === 'backspace') {
+        textInput.value = textInput.value.slice(0, -1)
+      } else if (key === 'enter') {
+        textInput.value += '\n'
+      } else {
+        textInput.value += key
+      }
+
+      // Clear suggestion immediately when typing starts
+      if (previousValue !== textInput.value) {
+        this.suggestionTarget.textContent = ''
+        this.input()
       }
     }
 
-    function startRepeatingDelete() {
-      deleteCharacter();
-      backspaceTimer = setInterval(deleteCharacter, repeatDelay);
-    }
-
-    function stopRepeatingDelete() {
-      if (backspaceTimer) {
-        clearInterval(backspaceTimer);
-        backspaceTimer = null;
-      }
-    }
-
-    function handleBackspacePress(e) {
-      e.preventDefault();
-      deleteCharacter();
-      
-      let pressTimer = setTimeout(() => {
-        startRepeatingDelete();
-      }, initialDelay);
-
-      const handleRelease = (e) => {
-        clearTimeout(pressTimer);
-        stopRepeatingDelete();
-        document.removeEventListener('mouseup', handleRelease);
-        document.removeEventListener('touchend', handleRelease);
-      };
-
-      document.addEventListener('mouseup', handleRelease);
-      document.addEventListener('touchend', handleRelease);
-    }
-
-    function handleKeyClick(e) {
-      const key = e.target.closest('.key');
-      if (!key || key.classList.contains('key-toggle')) return;
-      
-      const keyValue = key.dataset.key;
-      
-      key.classList.add('active');
-      setTimeout(() => key.classList.remove('active'), 100);
-
-      if (keyValue === 'backspace') {
-        return;
-      }
-      
-      switch(keyValue) {
-        case 'enter':
-          textInput.value += '\n';
-          break;
-        default:
-          textInput.value += keyValue;
-      }
-      
-      textInput.scrollTop = textInput.scrollHeight;
-    }
-
-    function toggleKeyboard() {
-      letterKeyboard.classList.toggle('hidden');
-      numberKeyboard.classList.toggle('hidden');
-    }
-
-    letterKeyboard.addEventListener('click', handleKeyClick);
-    numberKeyboard.addEventListener('click', handleKeyClick);
-
-    document.querySelectorAll('.key[data-key="backspace"]').forEach(backspaceKey => {
-      backspaceKey.addEventListener('mousedown', handleBackspacePress);
-      backspaceKey.addEventListener('touchstart', handleBackspacePress, { passive: false });
-    });
-
-    toggleButton.addEventListener('click', (e) => {
-      e.target.classList.add('active');
-      setTimeout(() => e.target.classList.remove('active'), 100);
-      toggleKeyboard();
-    });
-    
-    toggleButtonNum.addEventListener('click', (e) => {
-      e.target.classList.add('active');
-      setTimeout(() => e.target.classList.remove('active'), 100);
-      toggleKeyboard();
-    });
-
+    // Add click handlers to all keys
     document.querySelectorAll('.key').forEach(key => {
-      if (!key.querySelector('span')) {
-        const text = key.textContent;
-        key.innerHTML = `<span>${text}</span>`;
-      }
-    });
+      key.addEventListener('click', () => {
+        const keyValue = key.getAttribute('data-key')
+        handleKeyPress(keyValue)
+      })
+    })
+  }
 
-    document.addEventListener('touchmove', (e) => {
-      if (e.target.closest('.keyboard')) {
-        e.preventDefault();
+  input() {
+    const text = this.inputTarget.value
+
+    // Clear the previous timer
+    clearTimeout(this.typingTimer)
+
+    // Only make request if we have at least 2 characters
+    if (text.length >= 2) {
+      // Set a new timer
+      this.typingTimer = setTimeout(() => {
+        this.fetchSuggestion(text)
+      }, this.doneTypingInterval)
+    } else {
+      // Clear suggestion if text is too short
+      this.suggestionTarget.textContent = ''
+    }
+  }
+
+  fetchSuggestion(text) {
+    fetch('/api/v1/smart_typer/suggest', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+      },
+      body: JSON.stringify({
+        text: text,
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      // Only show suggestion if confidence is above 0.2
+      if (data.confidence >= 0.2) {
+        let suggestionClass = 'suggestion-low'
+        if (data.confidence >= 0.7) {
+          suggestionClass = 'suggestion-high'
+        } else if (data.confidence >= 0.2) {
+          suggestionClass = 'suggestion-medium'
+        }
+
+        // Show only the suggested completion part
+        const currentText = this.inputTarget.value
+        const suggestionText = data.text.startsWith(currentText)
+          ? data.text.slice(currentText.length)
+          : data.text
+
+        this.suggestionTarget.className = `suggestion ${suggestionClass}`
+        this.suggestionTarget.textContent = suggestionText
+      } else {
+        this.suggestionTarget.textContent = ''
       }
-    }, { passive: false });
+    })
+    .catch(error => console.error('Error:', error))
   }
 }

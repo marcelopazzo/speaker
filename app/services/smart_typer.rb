@@ -10,8 +10,8 @@ class SmartTyper
     )
   end
 
-  def suggest_completion(partial_text:, context: nil)
-    prompt = build_prompt(partial_text, context)
+  def suggest_completion(text:)
+    prompt = build_prompt(text)
 
     result = @client.generate_content({
       contents: {
@@ -25,7 +25,7 @@ class SmartTyper
 
   private
 
-  def build_prompt(partial_text, context)
+  def build_prompt(text)
     <<~PROMPT
       You are a smart text completion assistant for a patient with
       Amyotrophic lateral sclerosis (ALS) with a speech impairment.
@@ -35,16 +35,14 @@ class SmartTyper
       3. Consider the context if provided
       4. Always use Brazilian Portuguese
       5. Return a JSON object with the following keys:
-        - text: The completed text if you can complete it;
-        - word: The full word you are completing;
+        - text: The complete text if you can complete it, including given text;
         - confidence: A confidence score between 0 and 1
 
-      Context: #{context || 'No specific context provided'}
-      Partial text: #{partial_text}
+      Provided text: #{text}
 
       Please complete the text naturally and fix any typos.
       Return ONLY the raw JSON object without any markdown formatting, code blocks, or additional text.
-      Example of expected response: {"text":"completo","word":"palavra","confidence":0.95}
+      Example of expected response: {"text":"mensagem completa","confidence":0.95}
     PROMPT
   end
 
@@ -61,7 +59,6 @@ class SmartTyper
     rescue JSON::ParserError
       {
         text: response_text,
-        word: "",
         confidence: 0.0
       }
     end

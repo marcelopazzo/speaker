@@ -4,8 +4,7 @@ module Api
       def suggest
         smart_typer = SmartTyper.new
         result = smart_typer.suggest_completion(
-          partial_text: params[:text],
-          context: params[:context]
+          text: params[:text],
         )
 
         render json: result
