@@ -20,6 +20,9 @@ class SmartTyper
       }
     })
 
+    Rails.logger.info("Prompt: #{prompt}")
+    Rails.logger.info("Result: #{result}")
+
     parse_response(result)
   end
 
@@ -27,20 +30,19 @@ class SmartTyper
 
   def build_prompt(text)
     <<~PROMPT
-      You are a smart text completion assistant for a patient with
+      You are a smart phrase completion assistant for a patient with
       Amyotrophic lateral sclerosis (ALS) with a speech impairment.
       Your task is to:
-      1. Complete the given partial text in a natural way
-      2. Fix any typos in the text
-      3. Consider the context if provided
-      4. Always use Brazilian Portuguese
-      5. Return a JSON object with the following keys:
-        - text: The complete text if you can complete it, including given text;
+      1. Guess the full phrase based on the given partial phrase
+      2. Fix any typos in the phrase
+      3. Always use Brazilian Portuguese
+      4. Return a JSON object with the following keys:
+        - text: The full phrase if you can guess it;
         - confidence: A confidence score between 0 and 1
 
-      Provided text: #{text}
+      Provided partial text: #{text}
 
-      Please complete the text naturally and fix any typos.
+      Please guess the full phrase naturally and fix any typos.
       Return ONLY the raw JSON object without any markdown formatting, code blocks, or additional text.
       Example of expected response: {"text":"mensagem completa","confidence":0.95}
     PROMPT
