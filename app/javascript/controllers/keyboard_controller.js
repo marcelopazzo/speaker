@@ -5,7 +5,7 @@ export default class extends Controller {
 
   connect() {
     this.typingTimer = null
-    this.doneTypingInterval = 3000 // 3 seconds
+    this.doneTypingInterval = 2000 // 2 seconds
     this.setupKeyboard()
   }
 
