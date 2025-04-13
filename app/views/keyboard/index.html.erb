@@ -22,7 +22,8 @@
       <% "ASDFGHJKLÇ".each_char do |key| %>
         <button class="key" data-key="<%= key %>"><%= key %></button>
       <% end %>
-      <button class="key key-wide" data-key="enter">⏎</button>
+      <%# <button class="key key-wide" data-key="enter">⏎</button> %>
+      <button id="speak-button" class="key key-wide" data-keyboard-target="speakButton" data-key="">🔊</button>
     </div>
 
     <div class="keyboard-row">

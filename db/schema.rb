@@ -10,5 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 0) do
+ActiveRecord::Schema[8.0].define(version: 2024_03_21_000000) do
+  create_table "audio_files", force: :cascade do |t|
+    t.string "file_path", null: false
+    t.text "text", null: false
+    t.integer "use_count", default: 1, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 end

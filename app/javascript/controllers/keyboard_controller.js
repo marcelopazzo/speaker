@@ -1,12 +1,13 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["input", "suggestion"]
+  static targets = ["input", "suggestion", "speakButton"]
 
   connect() {
     this.typingTimer = null
     this.doneTypingInterval = 2000 // 2 seconds
     this.setupKeyboard()
+    this.speakButtonTarget.onclick = () => this.speakText()
   }
 
   setupKeyboard() {
@@ -106,6 +107,32 @@ export default class extends Controller {
       } else {
         this.suggestionTarget.textContent = ''
       }
+    })
+    .catch(error => console.error('Error:', error))
+  }
+
+  speakText() {
+    const text = this.inputTarget.value
+    if (!text) return
+
+    fetch('/api/v1/text_reader/speak', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+      },
+      body: JSON.stringify({ text: text })
+    })
+    .then(response => {
+      if (response.ok) {
+        return response.blob()
+      }
+      throw new Error('Network response was not ok')
+    })
+    .then(blob => {
+      const audioUrl = URL.createObjectURL(blob)
+      const audio = new Audio(audioUrl)
+      audio.play()
     })
     .catch(error => console.error('Error:', error))
   }
