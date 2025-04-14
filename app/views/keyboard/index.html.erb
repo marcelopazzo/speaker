@@ -8,7 +8,10 @@
       data-keyboard-target="input"
     ></textarea>
     <button class="clear-button" data-keyboard-target="clearButton" data-action="click->keyboard#clearText">×</button>
-    <div data-keyboard-target="suggestion" class="suggestion"></div>
+    <div class="suggestion-container">
+      <div data-keyboard-target="suggestion" class="suggestion"></div>
+      <button class="copy-suggestion-button" data-keyboard-target="copySuggestion" data-action="click->keyboard#copySuggestion">⬆</button>
+    </div>
   </div>
 
   <div class="keyboard" id="letter-keyboard">

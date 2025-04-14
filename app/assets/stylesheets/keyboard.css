@@ -17,25 +17,25 @@ body {
   margin-bottom: 1rem;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 5px;
-  background-color: #fff;
-  min-height: 120px;
-  max-height: 25vh;
-  overflow: hidden;
+  gap: 5px;
+  padding: 10px;
+  background-color: #f0f0f0;
+  min-height: 160px;
+  max-height: 30vh;
+  overflow: visible;
 }
 
 .text-input {
-  flex: 1;
   width: 100%;
-  height: 100%;
-  padding: 5px;
+  height: 160px;
+  padding: 10px;
+  padding-right: 85px; /* Make room for the clear button */
   font-size: min(8vh, 6vw);
   font-weight: 500;
   border: 1px solid #ccc;
   border-radius: 5px;
   resize: none;
-  background: transparent;
+  background: #fff;
   color: #000;
   box-sizing: border-box;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -175,9 +175,22 @@ body {
   }
 }
 
+.suggestion-container {
+  position: relative;
+  height: 160px;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background: #fff;
+  margin-top: 5px;
+}
+
 .suggestion {
-  flex: 1;
-  padding: 5px;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  padding-right: 85px;
   font-size: min(8vh, 6vw);
   font-weight: 500;
   pointer-events: none;
@@ -187,9 +200,8 @@ body {
   line-height: 1.2;
   letter-spacing: 1px;
   text-transform: uppercase;
-  z-index: 1;
-  border: 1px solid transparent;
-  overflow: hidden;
+  box-sizing: border-box;
+  overflow-y: auto;
 }
 
 .suggestion-low {
@@ -204,16 +216,46 @@ body {
   color: #4B5563; /* dark gray */
 }
 
-.clear-button {
+.copy-suggestion-button {
   position: absolute;
   right: 15px;
-  top: 15px;
+  top: 50%;
+  transform: translateY(-50%);
   background: rgba(255, 255, 255, 0.9);
   border: 1px solid #ccc;
   border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  font-size: 2rem;
+  width: 80px;
+  height: 80px;
+  font-size: 2.0rem;
+  color: #666;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  opacity: 0.7;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.copy-suggestion-button:hover {
+  opacity: 1;
+  background: #fff;
+  border-color: #999;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.clear-button {
+  position: absolute;
+  right: 25px;
+  top: 15%;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  font-size: 3.5rem;
   color: #666;
   cursor: pointer;
   padding: 0;
@@ -231,5 +273,5 @@ body {
   background: #fff;
   border-color: #999;
   transform: scale(1.1);
-} 
+}
 

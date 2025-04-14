@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["input", "suggestion", "speakButton", "clearButton"]
+  static targets = ["input", "suggestion", "speakButton", "clearButton", "copySuggestion"]
 
   connect() {
     this.typingTimer = null
@@ -167,5 +167,17 @@ export default class extends Controller {
     this.inputTarget.value = ''
     this.suggestionTarget.textContent = ''
     this.inputTarget.focus()
+  }
+
+  copySuggestion(event) {
+    event.preventDefault()
+    const currentText = this.inputTarget.value
+    const suggestionText = this.suggestionTarget.textContent
+
+    if (suggestionText) {
+      this.inputTarget.value = suggestionText
+      this.suggestionTarget.textContent = ''
+      this.inputTarget.focus()
+    }
   }
 }
