@@ -6,6 +6,9 @@ export default class extends Controller {
   connect() {
     this.typingTimer = null
     this.doneTypingInterval = 2000 // 2 seconds
+    this.backspaceTimer = null
+    this.initialDelay = 500
+    this.repeatDelay = 100
     this.setupKeyboard()
     this.speakButtonTarget.onclick = () => this.speakText()
   }
@@ -53,6 +56,28 @@ export default class extends Controller {
         const keyValue = key.getAttribute('data-key')
         handleKeyPress(keyValue)
       })
+
+      // Backspace hold functionality
+      if (key.getAttribute('data-key') === 'backspace') {
+        key.addEventListener('mousedown', () => {
+          handleKeyPress('backspace')
+          this.backspaceTimer = setTimeout(() => {
+            this.backspaceTimer = setInterval(() => {
+              handleKeyPress('backspace')
+            }, this.repeatDelay)
+          }, this.initialDelay)
+        })
+
+        key.addEventListener('mouseup', () => {
+          clearTimeout(this.backspaceTimer)
+          clearInterval(this.backspaceTimer)
+        })
+
+        key.addEventListener('mouseleave', () => {
+          clearTimeout(this.backspaceTimer)
+          clearInterval(this.backspaceTimer)
+        })
+      }
     })
   }
 
