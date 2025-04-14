@@ -103,6 +103,7 @@ body {
   padding: 0;
   line-height: 1;
   min-width: 60px;
+  text-transform: uppercase;
 }
 
 .key > span {

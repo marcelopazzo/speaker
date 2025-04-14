@@ -45,7 +45,14 @@ class SmartTyper
       Please guess the full phrase naturally and fix any typos.
       Return ONLY the raw JSON object without any markdown formatting, code blocks, or additional text.
       Example of expected response: {"text":"mensagem completa","confidence":0.95}
+
+      These are examples of the most common phrases:
+      #{most_common_phrases}
     PROMPT
+  end
+
+  def most_common_phrases
+    AudioFile.order(use_count: :desc).limit(10).pluck(:text).join("\n")
   end
 
   def parse_response(response)
