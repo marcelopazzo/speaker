@@ -14,52 +14,77 @@
     </div>
   </div>
 
-  <div class="keyboard" id="letter-keyboard">
+  <div class="keyboard" id="abc-keyboard">
     <div class="keyboard-row">
-      <% "qwertyuiop".each_char do |key| %>
+      <% "abcdefghij".each_char do |key| %>
         <button class="key" data-key="<%= key %>"><%= key %></button>
       <% end %>
       <button class="key key-wide" data-key="backspace">⌫</button>
     </div>
 
     <div class="keyboard-row">
-      <% "asdfghjklç".each_char do |key| %>
+      <% "klmnopqrst".each_char do |key| %>
         <button class="key" data-key="<%= key %>"><%= key %></button>
       <% end %>
-      <%# <button class="key key-wide" data-key="enter">⏎</button> %>
-      <button id="speak-button" class="key key-wide" data-keyboard-target="speakButton" data-key="">🔊</button>
+      <button class="key key-wide" data-keyboard-target="speakButton" data-action="click->keyboard#speakText" data-key="">🔊</button>
     </div>
 
     <div class="keyboard-row">
-      <% "zxcvbnm".each_char do |key| %>
+      <% "uvwxyzç,.".each_char do |key| %>
         <button class="key" data-key="<%= key %>"><%= key %></button>
       <% end %>
-      <button class="key" data-key=",">,</button>
-      <button class="key" data-key=".">.</button>
       <button class="key" data-key=" ">␣</button>
-      <button id="keyboard-toggle" class="key key-wide" data-key="">123</button>
+      <button id="keyboard-toggle-abc" class="key key-wide" data-keyboard-target="toggleButton" data-action="click->keyboard#toggleLayout" data-key="">123</button>
     </div>
   </div>
 
   <div class="keyboard hidden" id="number-keyboard">
     <div class="keyboard-row">
-      <% "123".each_char do |key| %>
+      <% "123@#$%&*".each_char do |key| %>
         <button class="key" data-key="<%= key %>"><%= key %></button>
       <% end %>
-      <button class="key" data-key="backspace">⌫</button>
+      <button class="key key-wide" data-key="backspace">⌫</button>
     </div>
 
     <div class="keyboard-row">
-      <% "4560".each_char do |key| %>
+      <% "4560+-=()".each_char do |key| %>
         <button class="key" data-key="<%= key %>"><%= key %></button>
       <% end %>
+      <button class="key key-wide" data-keyboard-target="speakButton" data-action="click->keyboard#speakText" data-key="">🔊</button>
     </div>
 
     <div class="keyboard-row">
-      <% "789".each_char do |key| %>
+      <% "789/,.!?".each_char do |key| %>
         <button class="key" data-key="<%= key %>"><%= key %></button>
       <% end %>
-      <button id="keyboard-toggle-num" class="key" data-key="">ABC</button>
+      <button class="key" data-key=" ">␣</button>
+      <button id="keyboard-toggle-num" class="key key-wide" data-keyboard-target="toggleButton" data-action="click->keyboard#toggleLayout" data-key="">QWE</button>
+    </div>
+  </div>
+
+  <div class="keyboard hidden" id="qwerty-keyboard">
+    <div class="keyboard-row">
+      <% "QWERTYUIOP".each_char do |key| %>
+        <button class="key" data-key="<%= key %>"><%= key %></button>
+      <% end %>
+      <button class="key key-wide" data-key="backspace">⌫</button>
+    </div>
+
+    <div class="keyboard-row">
+      <% "ASDFGHJKLÇ".each_char do |key| %>
+        <button class="key" data-key="<%= key %>"><%= key %></button>
+      <% end %>
+      <button class="key key-wide" data-keyboard-target="speakButton" data-action="click->keyboard#speakText" data-key="">🔊</button>
+    </div>
+
+    <div class="keyboard-row">
+      <% "ZXCVBNM".each_char do |key| %>
+        <button class="key" data-key="<%= key %>"><%= key %></button>
+      <% end %>
+      <button class="key" data-key=",">,</button>
+      <button class="key" data-key=".">.</button>
+      <button class="key" data-key=" ">␣</button>
+      <button id="keyboard-toggle" class="key key-wide" data-keyboard-target="toggleButton" data-action="click->keyboard#toggleLayout" data-key="">ABC</button>
     </div>
   </div>
 </div>

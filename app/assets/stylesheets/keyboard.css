@@ -121,7 +121,8 @@ body {
 }
 
 #keyboard-toggle,
-#keyboard-toggle-num {
+#keyboard-toggle-num,
+#keyboard-toggle-abc {
   background-color: #007bff;
   color: white;
   font-size: min(6vh, 6vw);
@@ -129,7 +130,8 @@ body {
 }
 
 #keyboard-toggle.active,
-#keyboard-toggle-num.active {
+#keyboard-toggle-num.active,
+#keyboard-toggle-abc.active {
   background-color: #0056b3;
 }
 
@@ -159,7 +161,8 @@ body {
   }
 
   #keyboard-toggle,
-  #keyboard-toggle-num {
+  #keyboard-toggle-num,
+  #keyboard-toggle-abc {
     font-size: min(5vh, 5vw);
   }
 

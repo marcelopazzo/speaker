@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["input", "suggestion", "speakButton", "clearButton", "copySuggestion"]
+  static targets = ["input", "suggestion", "speakButton", "clearButton", "copySuggestion", "toggleButton"]
 
   connect() {
     this.typingTimer = null
@@ -9,27 +9,33 @@ export default class extends Controller {
     this.backspaceTimer = null
     this.initialDelay = 500
     this.repeatDelay = 100
+    this.currentLayout = 'abc'
     this.setupKeyboard()
-    this.speakButtonTarget.onclick = () => this.speakText()
+  }
+
+  toggleLayout(event) {
+    event.preventDefault()
+    const layouts = {
+      abc: { next: 'number', button: '123' },
+      number: { next: 'qwerty', button: 'QWE' },
+      qwerty: { next: 'abc', button: 'ABC' }
+    }
+
+    // Hide current keyboard
+    document.getElementById(`${this.currentLayout}-keyboard`).classList.add('hidden')
+    
+    // Show next keyboard
+    this.currentLayout = layouts[this.currentLayout].next
+    document.getElementById(`${this.currentLayout}-keyboard`).classList.remove('hidden')
+
+    // Update all toggle buttons
+    this.toggleButtonTargets.forEach(button => {
+      button.textContent = layouts[this.currentLayout].button
+    })
   }
 
   setupKeyboard() {
     const textInput = this.inputTarget
-    const letterKeyboard = document.getElementById('letter-keyboard')
-    const numberKeyboard = document.getElementById('number-keyboard')
-    const keyboardToggle = document.getElementById('keyboard-toggle')
-    const keyboardToggleNum = document.getElementById('keyboard-toggle-num')
-
-    // Handle keyboard toggle
-    keyboardToggle.addEventListener('click', () => {
-      letterKeyboard.classList.add('hidden')
-      numberKeyboard.classList.remove('hidden')
-    })
-
-    keyboardToggleNum.addEventListener('click', () => {
-      numberKeyboard.classList.add('hidden')
-      letterKeyboard.classList.remove('hidden')
-    })
 
     // Handle key presses
     const handleKeyPress = (key) => {
