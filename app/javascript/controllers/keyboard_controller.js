@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["input", "suggestion", "speakButton"]
+  static targets = ["input", "suggestion", "speakButton", "clearButton"]
 
   connect() {
     this.typingTimer = null
@@ -160,5 +160,12 @@ export default class extends Controller {
       audio.play()
     })
     .catch(error => console.error('Error:', error))
+  }
+
+  clearText(event) {
+    event.preventDefault()
+    this.inputTarget.value = ''
+    this.suggestionTarget.textContent = ''
+    this.inputTarget.focus()
   }
 }
