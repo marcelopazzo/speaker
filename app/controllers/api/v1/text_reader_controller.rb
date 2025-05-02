@@ -3,7 +3,7 @@ module Api
     class TextReaderController < ApplicationController
       def speak
         # Check if we already have this text in our database
-        audio_file = AudioFile.find_by(text: params[:text])
+        audio_file = AudioFile.find_by(text: params[:text], user: current_user)
 
         if audio_file && File.exist?(audio_file.file_path)
           # Use existing file
@@ -29,7 +29,8 @@ module Api
             # Store the audio file information
             AudioFile.create!(
               file_path: target_path.to_s,
-              text: params[:text]
+              text: params[:text],
+              user: current_user
             )
 
             # Send the file

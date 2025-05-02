@@ -2,7 +2,7 @@ module Api
   module V1
     class SmartTyperController < ApplicationController
       def suggest
-        smart_typer = SmartTyper.new
+        smart_typer = SmartTyper.new(current_user)
         result = smart_typer.suggest_completion(
           text: params[:text],
         )

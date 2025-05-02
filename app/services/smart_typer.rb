@@ -1,5 +1,6 @@
 class SmartTyper
-  def initialize
+  def initialize(user)
+    @user = user
     @client = Gemini.new(
       credentials: {
         service: "generative-language-api",
@@ -52,7 +53,7 @@ class SmartTyper
   end
 
   def most_common_phrases
-    AudioFile.order(use_count: :desc).limit(10).pluck(:text).join("\n")
+    @user.audio_files.order(use_count: :desc).limit(10).pluck(:text).join("\n")
   end
 
   def parse_response(response)
