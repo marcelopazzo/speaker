@@ -24,6 +24,8 @@ gem "importmap-rails"
 gem "gemini-ai", "~> 4.2"
 # Used to hit the ElevenLabs API
 gem "http"
+# Omniauth for Google Auth
+gem "omniauth-google-oauth2"
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"

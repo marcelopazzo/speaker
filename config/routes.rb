@@ -10,7 +10,8 @@ Rails.application.routes.draw do
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Defines the root path route ("/")
-  root "keyboard#index"
+  root "home#index"
+  get "keyboard", to: "keyboard#index"
 
   namespace :api do
     namespace :v1 do
@@ -18,4 +19,9 @@ Rails.application.routes.draw do
       post "text_reader/speak", to: "text_reader#speak"
     end
   end
+
+  # Authentication routes
+  get "/auth/:provider/callback", to: "sessions#create"
+  get "/auth/failure", to: "sessions#failure"
+  get "/signout", to: "sessions#destroy", as: :signout
 end
