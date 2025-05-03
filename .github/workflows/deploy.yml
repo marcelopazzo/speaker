@@ -60,11 +60,13 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519
           eval $(ssh-agent -s)
           ssh-add ~/.ssh/id_ed25519
-          ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
-          ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "echo 'Signed in'"
 
       - name: Deploy with Kamal
-        run: bin/kamal deploy
+        run: |
+          ssh-keygen -R ${{ secrets.SERVER_HOST }}
+          ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
+          ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "echo 'Signed in'"
+          bin/kamal deploy
         env:
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
           KAMAL_REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
