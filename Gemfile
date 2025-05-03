@@ -73,6 +73,7 @@ group :test do
 end
 
 group :tools do
+  # Gems in the :tools group are used for development and deployment tools.
   # Deploy this application anywhere as a Docker container [https://kamal-deploy.org]
   gem "kamal", "~> 2", require: false
 end
