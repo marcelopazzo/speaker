@@ -40,6 +40,7 @@ jobs:
           ruby-version: ${{ steps.ruby-version.outputs.version }}
           bundler-cache: true
           cache-version: "tools-v1-${{ runner.os }}"
+          bundler: '2.6.2'
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -48,6 +49,12 @@ jobs:
           driver-opts: |
             image=moby/buildkit:master
             network=host
+
+      - name: Install Kamal
+        run: |
+          bundle config set --local with tools
+          bundle install
+          bundle binstub kamal
 
       - name: Expose GitHub Runtime for cache
         uses: crazy-max/ghaction-github-runtime@v3
