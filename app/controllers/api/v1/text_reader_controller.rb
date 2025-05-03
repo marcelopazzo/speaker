@@ -21,9 +21,9 @@ module Api
           filename = reader.text_to_speech(text: params[:text])
 
           if filename
-            # Move file to data directory
+            # Move file to storage directory
             source_path = Rails.root.join("tmp", filename)
-            target_path = Rails.root.join("data", "audio", filename)
+            target_path = Rails.root.join("storage", "audio", filename)
             FileUtils.mv(source_path, target_path)
 
             # Store the audio file information
