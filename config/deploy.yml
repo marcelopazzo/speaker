@@ -10,8 +10,14 @@ servers:
     hosts:
       - speaker.marcelopazzo.com
     labels:
-      traefik.http.routers.speaker.rule: speaker.marcelopazzo.com
+      traefik.http.routers.speaker.rule: Host(`speaker.marcelopazzo.com`)
       traefik.http.services.speaker.loadbalancer.server.port: 80
+    healthcheck:
+      path: /up
+      port: 80
+      max_attempts: 10
+      interval: 5s
+      timeout: 3s
 
 # Enable SSL auto certification via Let's Encrypt
 proxy:
@@ -32,6 +38,8 @@ env:
     # Run the Solid Queue Supervisor inside the web server's Puma process to do jobs.
     # When you start using multiple servers, you should split out job processing to a dedicated machine.
     SOLID_QUEUE_IN_PUMA: true
+    # Allow all hosts in production
+    RAILS_HOST_AUTHORIZATION: "true"
 
     # Set number of processes dedicated to Solid Queue (default: 1)
     # JOB_CONCURRENCY: 3
