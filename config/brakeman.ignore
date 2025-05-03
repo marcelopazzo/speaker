@@ -30,7 +30,7 @@
       "check_name": "SendFile",
       "message": "Parameter value used in file name",
       "file": "app/controllers/api/v1/text_reader_controller.rb",
-      "line": 37,
+      "line": 38,
       "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
       "code": "send_file(Rails.root.join(\"data\", \"audio\", TextReader.new.text_to_speech(:text => params[:text])), :filename => TextReader.new.text_to_speech(:text => params[:text]), :type => \"audio/mpeg\", :disposition => \"inline\")",
       "render_path": null,
@@ -49,20 +49,20 @@
     {
       "warning_type": "File Access",
       "warning_code": 16,
-      "fingerprint": "ef0fe94b2657b295a8b26f98f6e85ba2ab23ca59c77b1dd1ae976591168b60e7",
+      "fingerprint": "d4c463db9669913851c19676ac126778428efa376c2f052099533e944b93bfe8",
       "check_name": "SendFile",
       "message": "Model attribute used in file name",
       "file": "app/controllers/api/v1/text_reader_controller.rb",
       "line": 13,
       "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
-      "code": "send_file(AudioFile.find_by(:text => params[:text]).file_path, :filename => File.basename(AudioFile.find_by(:text => params[:text]).file_path), :type => \"audio/mpeg\", :disposition => \"inline\")",
+      "code": "send_file(AudioFile.find_by(:text => params[:text], :user => current_user).file_path, :filename => File.basename(AudioFile.find_by(:text => params[:text], :user => current_user).file_path), :type => \"audio/mpeg\", :disposition => \"inline\")",
       "render_path": null,
       "location": {
         "type": "method",
         "class": "Api::V1::TextReaderController",
         "method": "speak"
       },
-      "user_input": "AudioFile.find_by(:text => params[:text]).file_path",
+      "user_input": "AudioFile.find_by(:text => params[:text], :user => current_user).file_path",
       "confidence": "Medium",
       "cwe_id": [
         22
