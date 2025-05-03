@@ -12,12 +12,9 @@ servers:
     labels:
       traefik.http.routers.speaker.rule: Host(`speaker.marcelopazzo.com`)
       traefik.http.services.speaker.loadbalancer.server.port: 80
-    healthcheck:
-      path: /up
-      port: 80
-      max_attempts: 10
-      interval: 5s
-      timeout: 3s
+      traefik.http.services.speaker.loadbalancer.healthcheck.path: /up
+      traefik.http.services.speaker.loadbalancer.healthcheck.interval: 5s
+      traefik.http.services.speaker.loadbalancer.healthcheck.timeout: 3s
 
 # Enable SSL auto certification via Let's Encrypt
 proxy:
