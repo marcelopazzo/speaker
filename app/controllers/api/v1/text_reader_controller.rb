@@ -22,9 +22,8 @@ module Api
 
           if filename
             # Move file to storage directory
-            source_path = Rails.root.join("tmp", filename)
-            target_path = Rails.root.join("storage", "audio", filename)
-            FileUtils.mv(source_path, target_path)
+            target_path = Rails.root.join("storage", "audio", filename.basename)
+            FileUtils.mv(filename, target_path)
 
             # Store the audio file information
             AudioFile.create!(
@@ -36,7 +35,7 @@ module Api
             # Send the file
             send_file(
               target_path,
-              filename: filename,
+              filename: filename.basename,
               type: "audio/mpeg",
               disposition: "inline"
             )

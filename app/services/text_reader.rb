@@ -48,7 +48,7 @@ class TextReader
       end
 
       # Return the filename for the controller to use
-      filename
+      filepath
     rescue => e
       Rails.logger.error("ElevenLabs API Error: #{e.message}")
       Rails.logger.error(e.backtrace.join("\n"))
