@@ -62,6 +62,7 @@ jobs:
           eval $(ssh-agent -s)
           ssh-add ~/.ssh/id_ed25519
           ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
+          ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "echo 'Signed in'"
 
       - name: Deploy with Kamal
         run: bin/kamal deploy
