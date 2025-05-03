@@ -4,7 +4,7 @@ class SmartTyper
     @client = Gemini.new(
       credentials: {
         service: "generative-language-api",
-        api_key: ENV["GOOGLE_API_KEY"],
+        api_key: Rails.application.credentials.google.api_key,
         version: "v1beta"
       },
       options: { model: "gemini-2.0-flash", server_sent_events: true }

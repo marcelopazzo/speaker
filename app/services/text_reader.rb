@@ -2,7 +2,6 @@ require "http"
 
 class TextReader
   ELEVENLABS_FQDN = "https://api.elevenlabs.io"
-  VOICE_ID = ENV["VOICE_ID"]
 
   # Default parameters
   DEFAULT_STABILITY = ENV["DEFAULT_STABILITY"] || 0.5
@@ -12,7 +11,8 @@ class TextReader
   DEFAULT_MODEL = ENV["DEFAULT_MODEL"] || "eleven_multilingual_v2"
 
   def initialize
-    @api_key = ENV["ELEVENLABS_API_KEY"]
+    @api_key = Rails.application.credentials.elevenlabs.api_key
+    @voice_id = Rails.application.credentials.elevenlabs.voice_id
   end
 
   def text_to_speech(text:)
@@ -32,7 +32,7 @@ class TextReader
         }
       }
 
-      url_path = "#{ELEVENLABS_FQDN}/v1/text-to-speech/#{VOICE_ID}"
+      url_path = "#{ELEVENLABS_FQDN}/v1/text-to-speech/#{@voice_id}"
 
       audio_content = authorized_http_client
         .post(url_path, json: body)
