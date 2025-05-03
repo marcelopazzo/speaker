@@ -47,7 +47,7 @@ jobs:
         with:
           platforms: linux/amd64
           driver-opts: |
-            image=moby/buildkit:master
+            image=moby/buildkit:v0.11.6
             network=host
 
       - name: Expose GitHub Runtime for cache
