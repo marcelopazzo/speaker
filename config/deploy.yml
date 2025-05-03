@@ -81,15 +81,3 @@ builder:
 # Use a different ssh user than root
 ssh:
   user: root
-
-# Use accessory services (secrets come from .kamal/secrets).
-
-healthcheck:
-  path: /up
-  port: 80
-  max_attempts: 10
-  interval: 5s
-
-rolling_deploy:
-  max_unavailable: 0
-  max_surge: 1

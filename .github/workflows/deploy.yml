@@ -50,12 +50,6 @@ jobs:
             image=moby/buildkit:master
             network=host
 
-      - name: Install Kamal
-        run: |
-          bundle config set --local with tools
-          bundle install
-          bundle binstub kamal
-
       - name: Expose GitHub Runtime for cache
         uses: crazy-max/ghaction-github-runtime@v3
 
