@@ -70,4 +70,3 @@ jobs:
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
           KAMAL_REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
           KAMAL_REGISTRY_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          RUBY_VERSION: ${{ steps.ruby-version.outputs.version }}
