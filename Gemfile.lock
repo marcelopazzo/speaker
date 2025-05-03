@@ -77,6 +77,7 @@ GEM
     ast (2.4.3)
     base64 (0.2.0)
     bcrypt_pbkdf (1.1.1)
+    bcrypt_pbkdf (1.1.1-x86_64-darwin)
     benchmark (0.4.0)
     bigdecimal (3.1.9)
     bindex (0.8.1)
@@ -473,7 +474,7 @@ DEPENDENCIES
   importmap-rails
   jbuilder
   jsbundling-rails
-  kamal
+  kamal (~> 2)
   omniauth-google-oauth2
   propshaft
   puma (>= 5.0)

@@ -81,10 +81,11 @@ Rails.application.configure do
 
   # Enable DNS rebinding protection and other `Host` header attacks.
   config.hosts = [
-    "speaker.marcelopazzo.com",     # Allow requests from example.com
-    /.*\.speaker\.marcelopazzo\.com/ # Allow requests from subdomains like `www.example.com`
+    "speaker.marcelopazzo.com",     # Allow requests from marcelopazzo.com
+    /.*\.marcelopazzo\.com/,        # Allow requests from subdomains like `www.marcelopazzo.com`
+    /^[a-f0-9]{12}$/               # Allow Docker container hostnames (12 character hex)
   ]
-  #
+
   # Skip DNS rebinding protection for the default health check endpoint.
-  # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+  config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
 end
