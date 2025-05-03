@@ -11,12 +11,6 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: false
 
-env:
-  DOCKER_BUILDKIT: 1
-  RAILS_ENV: production
-  BUNDLE_WITHOUT: "default development test production profiling"
-  BUNDLE_WITH: tools
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -24,7 +18,14 @@ jobs:
     permissions:
       contents: read
       packages: write
+      attestations: write
       id-token: write
+
+    env:
+      DOCKER_BUILDKIT: 1
+      RAILS_ENV: production
+      BUNDLE_WITHOUT: "default development test production profiling"
+      BUNDLE_WITH: tools
 
     steps:
       - name: Checkout code
@@ -50,12 +51,8 @@ jobs:
             image=moby/buildkit:master
             network=host
 
-      - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Expose GitHub Runtime for cache
+        uses: crazy-max/ghaction-github-runtime@v3
 
       - name: Set up SSH
         run: |
@@ -70,8 +67,6 @@ jobs:
         run: bin/kamal deploy
         env:
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-          KAMAL_REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
-          KAMAL_REGISTRY_USERNAME: ${{ github.actor }}
-          KAMAL_HOST: ${{ secrets.SERVER_HOST }}
-          KAMAL_USER: ${{ secrets.SERVER_USER }}
+          KAMAL_REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
+          KAMAL_REGISTRY_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           RUBY_VERSION: ${{ steps.ruby-version.outputs.version }}

@@ -2,27 +2,27 @@
 service: speaker
 
 # Name of the container image.
-image: ghcr.io/marcelopazzo/speaker
+image: marcelopazzo/speaker
 
 # Deploy to these servers.
 servers:
   web:
     hosts:
-      - $KAMAL_HOST
+      - speaker.marcelopazzo.com
     labels:
-      traefik.http.routers.speaker.rule: Host(`$KAMAL_HOST`)
+      traefik.http.routers.speaker.rule: speaker.marcelopazzo.com
       traefik.http.services.speaker.loadbalancer.server.port: 80
 
 # Enable SSL auto certification via Let's Encrypt
 proxy:
   ssl: true
-  host: $KAMAL_HOST
+  host: speaker.marcelopazzo.com
 
 # Credentials for your image host.
 registry:
-  server: ghcr.io
-  username: $KAMAL_REGISTRY_USERNAME
-  password: $KAMAL_REGISTRY_PASSWORD
+  username: marcelopazzo
+  password:
+    - KAMAL_REGISTRY_PASSWORD
 
 # Inject ENV variables into containers (secrets come from .kamal/secrets).
 env:
