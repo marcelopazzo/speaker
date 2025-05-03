@@ -13,6 +13,7 @@ class SmartTyper
 
   def suggest_completion(text:)
     prompt = build_prompt(text)
+    Rails.logger.info("Prompt: #{prompt}")
 
     result = @client.generate_content({
       contents: {
@@ -21,10 +22,15 @@ class SmartTyper
       }
     })
 
-    Rails.logger.info("Prompt: #{prompt}")
     Rails.logger.info("Result: #{result}")
 
     parse_response(result)
+  rescue Faraday::BadRequestError => e
+    Rails.logger.error "SmartTyper API Error: #{e.message}"
+    Rails.logger.error "API Key present?: #{Rails.application.credentials.google.api_key.present?}"
+    Rails.logger.error "Response body: #{e.response&.body}" if e.response
+    Rails.logger.error "Response headers: #{e.response&.headers}" if e.response
+    raise
   end
 
   private
