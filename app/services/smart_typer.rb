@@ -28,8 +28,7 @@ class SmartTyper
   rescue Faraday::BadRequestError => e
     Rails.logger.error "SmartTyper API Error: #{e.message}"
     Rails.logger.error "API Key present?: #{Rails.application.credentials.google.api_key.present?}"
-    Rails.logger.error "Response body: #{e.response&.body}" if e.response
-    Rails.logger.error "Response headers: #{e.response&.headers}" if e.response
+    Rails.logger.error "Response: #{e.response&.inspect}"
     raise
   end
 
