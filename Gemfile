@@ -21,7 +21,7 @@ gem "jbuilder"
 # Importmap
 gem "importmap-rails"
 # AI For text completion
-gem "gemini-ai", "~> 4.2"
+gem "gemini-ai", "~> 4.3"
 # Used to hit the ElevenLabs API
 gem "http"
 # Omniauth for Google Auth
